@@ -138,7 +138,7 @@ namespace FSO.Server.Servers.City.Handlers
                 newAvatar.skin_tone = (byte)packet.SkinTone;
                 newAvatar.gender = packet.Gender == Protocol.Voltron.Model.Gender.FEMALE ? DbAvatarGender.female : DbAvatarGender.male;
                 newAvatar.user_id = session.UserId;
-                newAvatar.budget = 0;
+                newAvatar.budget = 10000;
 
                 if(packet.Gender == Protocol.Voltron.Model.Gender.MALE){
                     newAvatar.body_swimwear = 0x5470000000D;
