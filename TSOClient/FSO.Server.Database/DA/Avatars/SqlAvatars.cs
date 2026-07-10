@@ -43,7 +43,7 @@ namespace FSO.Server.Database.DA.Avatars
         }
 
         public DbAvatar Get(uint id){
-            return Context.Connection.Query<DbAvatar>("SELECT * FROM fso_avatars WHERE avatar_id = @id", new { id = id }).FirstOrDefault();
+            return Context.Connection.Query<DbAvatar>("SELECT a.*, u.is_founder FROM fso_avatars a JOIN fso_users u ON a.user_id = u.user_id WHERE a.avatar_id = @id", new { id = id }).FirstOrDefault();
         }
 
         public bool Delete(uint id)

@@ -469,7 +469,7 @@ namespace FSO.Client.UI.Panels
                 .WithMultiBinding(x =>
                 {
                     Redraw();
-                }, "Avatar_Name", "Avatar_IsOnline", "Avatar_Description", "Avatar_PrivacyMode", "Avatar_ModerationLevel");
+                }, "Avatar_Name", "Avatar_IsOnline", "Avatar_Description", "Avatar_PrivacyMode", "Avatar_ModerationLevel", "Avatar_IsFounder");
 
             MyAvatar = new Binding<Avatar>()
                 .WithMultiBinding(x =>
@@ -939,17 +939,23 @@ namespace FSO.Client.UI.Panels
 
                 if (CurrentAvatar.Value.Avatar_ModerationLevel != 0)
                 {
+                    ProfileBadge.Visible = true;
                     ProfileBadge.Texture = Content.Content.Get().CustomUI.Get("momi_badge.png").Get(GameFacade.GraphicsDevice);
                     ProfileBadge.ScaleX = 1f;
                     ProfileBadge.ScaleY = 1f;
                     ProfileBadge.Tooltip = "Staff";
                 }
-                else
+                else if (CurrentAvatar.Value.Avatar_IsFounder)
                 {
+                    ProfileBadge.Visible = true;
                     ProfileBadge.Texture = FounderButtonTexture;
                     ProfileBadge.Tooltip = "Founder";
                     ProfileBadge.ScaleX = 1f;
                     ProfileBadge.ScaleY = 1f;
+                }
+                else
+                {
+                    ProfileBadge.Visible = false;
                 }
 
                 if (OriginalDescription != CurrentAvatar.Value.Avatar_Description)

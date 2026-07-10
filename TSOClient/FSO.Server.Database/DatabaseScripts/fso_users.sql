@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `fso_users` (
   `register_date` int(10) NOT NULL,
   `is_admin` tinyint(3) NOT NULL,
   `is_moderator` tinyint(3) NOT NULL,
+  `is_founder` tinyint(3) NOT NULL DEFAULT '1',
   `is_banned` tinyint(3) NOT NULL,
   `register_ip` varchar(50) NOT NULL DEFAULT '127.0.0.1',
   `last_ip` varchar(50) NOT NULL DEFAULT '127.0.0.1',
@@ -26,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `fso_user_authenticate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Default user
-INSERT INTO fso_users VALUES (1, 'admin', 'admin@freeso.org', 'valid', 1439646790, 1, 1, 0, '127.0.0.1', '127.0.0.1') ON DUPLICATE KEY UPDATE user_id = user_id;
+INSERT INTO fso_users VALUES (1, 'admin', 'admin@freeso.org', 'valid', 1439646790, 1, 1, 1, 0, '127.0.0.1', '127.0.0.1') ON DUPLICATE KEY UPDATE user_id = user_id;
 
 -- Default user password
 INSERT INTO fso_user_authenticate VALUES (1, 'Rfc2898', 0x10E28CDC7DC433309503EC95A7222BF4CDE2C5DD386FB91CE632EBF9DC22B6EC398AA2FE6F2B0E60278493283CD6886A2C7072F97ACE3E06EF0EE1E93388A4A793A44DF0C124AF01364F55B28CCE1927B9) ON DUPLICATE KEY UPDATE user_id = user_id;

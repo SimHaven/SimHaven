@@ -47,6 +47,7 @@
         public ushort ticker_repairman { get; set; }
 
         public byte moderation_level { get; set; }
+        public bool is_founder { get; set; }
         public uint? custom_guid { get; set; }
         public uint move_date { get; set; }
         public uint name_date { get; set; }

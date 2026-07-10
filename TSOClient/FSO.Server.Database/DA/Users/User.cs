@@ -9,6 +9,7 @@
         public uint register_date { get; set; }
         public bool is_admin { get; set; }
         public bool is_moderator { get; set; }
+        public bool is_founder { get; set; }
         public bool is_banned { get; set; }
         public string register_ip { get; set; }
         public string last_ip { get; set; }
