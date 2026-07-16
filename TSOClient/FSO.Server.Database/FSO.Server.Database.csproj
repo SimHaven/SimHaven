@@ -97,6 +97,9 @@
     <Compile Include="DA\AuthTickets\IAuthTickets.cs" />
     <Compile Include="DA\AuthTickets\SqlAuthTickets.cs" />
     <Compile Include="DA\AvatarClaims\DbAvatarClaim.cs" />
+    <Compile Include="DA\AvatarTop100\DbAvatarTop100.cs" />
+    <Compile Include="DA\AvatarTop100\IAvatarTop100.cs" />
+    <Compile Include="DA\AvatarTop100\SqlAvatarTop100.cs" />
     <Compile Include="DA\AvatarClaims\IAvatarClaims.cs" />
     <Compile Include="DA\AvatarClaims\SqlAvatarClaims.cs" />
     <Compile Include="DA\Avatars\DbAvatar.cs" />
@@ -251,6 +254,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DatabaseScripts\changes\0031_global_cooldowns.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DatabaseScripts\changes\0032_fso_avatar_top100.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DatabaseScripts\changes\0030_tokens.sql">
