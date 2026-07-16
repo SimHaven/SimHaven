@@ -44,6 +44,12 @@ angular.module('admin', ['ngSanitize', 'restangular', 'ui.router', 'ngMaterial',
             templateUrl: 'app/admin/tasks/tasks.html',
             requiresAuth: true,
             resolve: resolve
+        }).state('admin.events', {
+            url: '/events',
+            controller: 'EventsCtrl',
+            templateUrl: 'app/admin/events/events.html',
+            requiresAuth: true,
+            resolve: resolve
         }).state('admin.updates', {
             url: '/updates',
             controller: 'UpdatesCtrl',

@@ -86,3 +86,21 @@ TSOClient/.vs/config/applicationhost.config
 *.nvuser
 
 TSOClient/Mario
+
+# SimHaven local deployment secrets and generated build state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.sqlite
+*.sqlite3
+*.db
+*.log
+TSOClient/FSO.Server/Admin/.build-cache/
+TSOClient/FSO.Server/Admin/.build-config/
+TSOClient/FSO.Server/FSO.Server.Cumulative.Build.csproj
+TSOClient/FSO.Server/updateID.txt
+TSOClient/FSO.Server/scheduledUpdate/
+TSOClient/FSO.Server/selfUpdate/

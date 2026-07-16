@@ -11,11 +11,11 @@ See `Initial Setup`, `Database Setup` for more information.
 ```json
 {
   "gameLocation": "./game/",
-  "secret": "38F7E3B816EF9F31BFAB8F4C9716C90D106BD85E9D6913FBB4D833C866F837B0",
+  "secret": "CHANGE_ME_TO_A_RANDOM_64_CHARACTER_HEX_SECRET",
   "simNFS": "./nfs",
 
   "database": {
-    "connectionString": "server=127.0.0.1;uid=fsoserver;pwd=password;database=fso;"
+    "connectionString": "server=127.0.0.1;uid=fsoserver;pwd=CHANGE_ME;database=fso;"
   }
 }
 ```

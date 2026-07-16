@@ -1,0 +1,86 @@
+<md-button class="md-fab md-fab-bottom-right" aria-label="Create special event" ng-click="showAdd($event)">
+    <md-tooltip>Create Special Event</md-tooltip>
+    <md-icon ng-md-icon icon="add"></md-icon>
+</md-button>
+
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
+            <ng-md-icon icon="menu"></ng-md-icon>
+        </md-button>
+        <h3>Special Events</h3>
+        <span flex></span>
+        <md-button ng-click="showAdd($event)" aria-label="Create special event">
+            <md-icon ng-md-icon icon="add"></md-icon>
+            New Event
+        </md-button>
+    </div>
+</md-toolbar>
+
+<md-content flex md-scroll-y class="events-page md-padding">
+    <div class="events-intro md-whiteframe-z1">
+        <div>
+            <h2>City Event Console</h2>
+            <p>Schedule temporary gameplay tuning, seasonal terrain, one-time Simoleon gifts, and in-game mail without editing SQL by hand.</p>
+        </div>
+        <div class="events-scope-note">
+            <strong>Scope:</strong> Skill and money-object tuning applies to ordinary lots. It does not change Job Lot payouts.
+        </div>
+    </div>
+
+    <div layout="row" layout-wrap class="event-summary">
+        <button type="button" class="event-summary__card event-summary__card--active" ng-class="{'is-selected': statusFilter === 'active'}" ng-click="statusFilter = 'active'">
+            <span>Active</span><strong>{{count('active')}}</strong><small>running now</small>
+        </button>
+        <button type="button" class="event-summary__card event-summary__card--upcoming" ng-class="{'is-selected': statusFilter === 'upcoming'}" ng-click="statusFilter = 'upcoming'">
+            <span>Upcoming</span><strong>{{count('upcoming')}}</strong><small>scheduled</small>
+        </button>
+        <button type="button" class="event-summary__card event-summary__card--expired" ng-class="{'is-selected': statusFilter === 'expired'}" ng-click="statusFilter = 'expired'">
+            <span>History</span><strong>{{count('expired')}}</strong><small>completed</small>
+        </button>
+    </div>
+
+    <div class="events-empty md-whiteframe-z1" ng-if="visibleEvents().length === 0">
+        <md-icon ng-md-icon icon="event_available"></md-icon>
+        <h3>No {{statusFilter}} events</h3>
+        <p ng-if="statusFilter === 'active'">The city is currently using its normal tuning.</p>
+        <p ng-if="statusFilter === 'upcoming'">Nothing is scheduled yet.</p>
+        <p ng-if="statusFilter === 'expired'">Completed events will remain here for reference.</p>
+    </div>
+
+    <div class="event-list" ng-if="visibleEvents().length > 0">
+        <article class="event-card md-whiteframe-z1" ng-repeat="evt in visibleEvents() | orderBy:'start_day':true">
+            <div class="event-card__status event-card__status--{{evt.status}}">{{evt.status}}</div>
+            <div class="event-card__body">
+                <div class="event-card__heading">
+                    <div>
+                        <h3>{{evt.title || 'Untitled Event'}}</h3>
+                        <span class="event-card__type">{{evt.type_label}}</span>
+                        <span class="event-card__preset" ng-if="evt.preset_name">{{evt.preset_name}}</span>
+                    </div>
+                    <div class="event-card__actions">
+                        <md-button class="md-icon-button" aria-label="Duplicate event" ng-click="showAdd($event, evt)">
+                            <md-tooltip>Duplicate Event</md-tooltip>
+                            <md-icon ng-md-icon icon="content_copy"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button event-card__end" aria-label="End event now" ng-if="evt.status === 'active'" ng-click="endNow($event, evt)">
+                            <md-tooltip>End Now</md-tooltip>
+                            <md-icon ng-md-icon icon="stop"></md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <p class="event-card__description" ng-if="evt.description">{{evt.description}}</p>
+                <div class="event-card__dates">
+                    <div><span>Starts</span><strong>{{evt.start_day | amDateFormat:'ddd, MMM D, YYYY h:mm A'}}</strong></div>
+                    <div><span>Ends</span><strong>{{evt.end_day | amDateFormat:'ddd, MMM D, YYYY h:mm A'}}</strong></div>
+                </div>
+                <div class="event-card__reward" ng-if="evt.type_name === 'free_money'">
+                    One-time gift: <strong>{{evt.value | number}} Simoleons per account</strong>
+                </div>
+                <div class="event-card__mail" ng-if="evt.mail_message">
+                    <md-icon ng-md-icon icon="mail"></md-icon> Includes in-game mail: <strong>{{evt.mail_subject}}</strong>
+                </div>
+            </div>
+        </article>
+    </div>
+</md-content>

@@ -42,18 +42,17 @@ namespace FSO.Server.Servers.City.Domain
         public void TickEvents()
         {
             var time = DateTime.UtcNow;
-            if (time > Next) //check events every hour
+            if (time > Next) //keep scheduled starts and stops responsive to the admin panel
             {
-                Next = NextHour(time);
+                Next = NextMinute(time);
 
                 //activate the new event
                 using (var da = DA.Get())
                 {
                     var active = da.Events.GetActive(time);
-                    List<DbEvent> newEvts, oldEvts;
+                    List<DbEvent> newEvts;
                     lock (ActiveEvents) {
                         newEvts = active.Where(x => !ActiveEvents.Any(y => y.event_id == x.event_id)).ToList();
-                        oldEvts = ActiveEvents.Where(x => !active.Any(y => y.event_id == x.event_id)).ToList();
 
                         ActiveEvents.Clear();
                         ActiveEvents.AddRange(active);
@@ -64,9 +63,9 @@ namespace FSO.Server.Servers.City.Domain
             }
         }
 
-        private DateTime NextHour(DateTime now)
+        private DateTime NextMinute(DateTime now)
         {
-            return Trim(now.AddHours(1), TimeSpan.TicksPerHour);
+            return Trim(now.AddMinutes(1), TimeSpan.TicksPerMinute);
         }
         private DateTime Trim(DateTime date, long roundTicks)
         {

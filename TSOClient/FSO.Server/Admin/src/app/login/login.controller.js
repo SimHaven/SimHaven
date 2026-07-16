@@ -2,7 +2,7 @@
 
 angular.module('admin')
   .controller('LoginCtrl', function ($scope, Auth, $location) {
-      $scope.apiUrl = "https://auth.east.ea.com/";
+      $scope.apiUrl = "https://play.simhavenserver.com";
       $scope.username = "admin";
       $scope.password = "password";
 

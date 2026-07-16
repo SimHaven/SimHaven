@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FreeSO Patcher")]
-[assembly: AssemblyDescription("Self-updater application for FreeSO. Extracts artifacts downloaded by FreeSO in order.")]
+[assembly: AssemblyTitle("SimHaven Patcher")]
+[assembly: AssemblyDescription("Self-updater application for SimHaven. Extracts artifacts downloaded by SimHaven in order.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FreeSO Patcher")]
+[assembly: AssemblyProduct("SimHaven Patcher")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -15,7 +15,12 @@ namespace FSO.Server.Database.DA.DbEvents
         {
             var connection = Context.Connection;
             var total = connection.Query<int>("SELECT COUNT(*) FROM fso_events").FirstOrDefault();
-            var results = connection.Query<DbEvent>("SELECT * FROM fso_events ORDER BY @order DESC LIMIT @offset, @limit", new { order = orderBy, offset = offset, limit = limit });
+            var allowedOrder = new HashSet<string>()
+            {
+                "event_id", "title", "start_day", "end_day", "type"
+            };
+            var order = allowedOrder.Contains(orderBy) ? orderBy : "start_day";
+            var results = connection.Query<DbEvent>("SELECT * FROM fso_events ORDER BY " + order + " DESC LIMIT @offset, @limit", new { offset = offset, limit = limit });
             return new PagedList<DbEvent>(results, offset, total);
         }
 
@@ -33,9 +38,19 @@ namespace FSO.Server.Database.DA.DbEvents
             return Context.Connection.Execute("DELETE FROM fso_events WHERE event_id = @event_id", new { event_id = event_id }) > 0;
         }
 
+        public bool End(int event_id, DateTime end)
+        {
+            return Context.Connection.Execute("UPDATE fso_events SET end_day = @end WHERE event_id = @event_id AND end_day > @end", new { event_id, end }) > 0;
+        }
+
         public List<DbEvent> GetActive(DateTime time)
         {
             return Context.Connection.Query<DbEvent>("SELECT * FROM fso_events WHERE start_day <= @time AND end_day >= @time", new { time = time }).ToList();
+        }
+
+        public List<DbEvent> GetOverlapping(DateTime start, DateTime end, DbEventType type)
+        {
+            return Context.Connection.Query<DbEvent>("SELECT * FROM fso_events WHERE type = @type AND start_day < @end AND end_day > @start", new { start, end, type = type.ToString() }).ToList();
         }
 
         public List<DbEvent> GetLatestNameDesc(int limit)

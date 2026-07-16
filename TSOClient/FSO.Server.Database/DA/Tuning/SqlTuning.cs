@@ -40,7 +40,7 @@ namespace FSO.Server.Database.DA.Tuning
 
         public bool ClearPresetTuning(int owner_id)
         {
-            return Context.Connection.Execute("DELETE FROM fso_tuning WHERE owner_type = 'EVENT' AND owner_id = owner_id", new { owner_id } ) > 0;
+            return Context.Connection.Execute("DELETE FROM fso_tuning WHERE owner_type = 'EVENT' AND owner_id = @owner_id", new { owner_id } ) > 0;
         }
 
         public bool ClearInactiveTuning(int[] active_ids)
@@ -52,7 +52,12 @@ namespace FSO.Server.Database.DA.Tuning
         {
             var result = Context.Connection.Query<int>("INSERT INTO fso_tuning_presets (name, description, flags) "
                 + "VALUES (@name, @description, @flags); SELECT LAST_INSERT_ID();",
-                preset).FirstOrDefault();
+                new
+                {
+                    name = preset.name,
+                    description = preset.description,
+                    flags = preset.flags
+                }).FirstOrDefault();
             return result;
         }
 
@@ -60,7 +65,14 @@ namespace FSO.Server.Database.DA.Tuning
         {
             var result = Context.Connection.Query<int>("INSERT INTO fso_tuning_preset_items (preset_id, tuning_type, tuning_table, tuning_index, value) "
                 + "VALUES (@preset_id, @tuning_type, @tuning_table, @tuning_index, @value); SELECT LAST_INSERT_ID();",
-                item).FirstOrDefault();
+                new
+                {
+                    preset_id = item.preset_id,
+                    tuning_type = item.tuning_type,
+                    tuning_table = item.tuning_table,
+                    tuning_index = item.tuning_index,
+                    value = item.value
+                }).FirstOrDefault();
             return result;
         }
 

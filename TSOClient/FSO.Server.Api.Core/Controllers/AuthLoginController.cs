@@ -18,7 +18,7 @@ namespace FSO.Server.Api.Core.Controllers
         private static Func<IActionResult> ERROR_160 = printError("INV-160", "The server is currently down for maintenance. Please try again later.");
         private static Func<IActionResult> ERROR_150 = printError("INV-150", "We're sorry, but your account has been suspended or cancelled.");
         private static string LOCK_MESSAGE = "Your account has been locked due to too many incorrect login attempts. " +
-            "If you cannot remember your password, it can be reset at https://beta.freeso.org/forgot. Locked for: ";
+            "If you cannot remember your password, it can be reset at https://playsimhaven.com/forgot/. Locked for: ";
 
         public static int LockAttempts = 5;
 

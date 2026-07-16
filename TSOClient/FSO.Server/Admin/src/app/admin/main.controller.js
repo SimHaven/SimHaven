@@ -27,6 +27,11 @@ angular.module('admin')
               icon: 'alarm'
           },
           {
+              link: '/admin/events',
+              title: 'Special Events',
+              icon: 'event'
+          },
+          {
               link: '/admin/updates',
               title: 'Updates',
               icon: 'system_update'

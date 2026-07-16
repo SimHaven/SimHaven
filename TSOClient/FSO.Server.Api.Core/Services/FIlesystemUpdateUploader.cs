@@ -19,13 +19,13 @@ namespace FSO.Server.Api.Core.Services
             var destFullPath = Path.Combine(Config.BasePath, destPath);
             File.Copy(fileName, destFullPath);
 
-            if (Config.BaseURL == null)
+            if (Config.BaseURL == null || destPath.StartsWith("updates/server-"))
             {
                 return Task.FromResult($"file:///{Path.GetFullPath(destFullPath)}");
             }
             else
             {
-                return Task.FromResult(new Uri(new Uri(Config.BaseURL), new Uri(destPath)).ToString());
+                return Task.FromResult(new Uri(new Uri(Config.BaseURL), destPath).ToString());
             }
         }
     }

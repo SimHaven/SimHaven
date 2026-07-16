@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "dependencies": {
     "bootstrap": "^3.4.1",
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.3"
   },
   "scripts": {
     "start": "gulp",
     "test": "gulp test"
   },
   "devDependencies": {
+    "bower": "^1.8.14",
     "browser-sync": "~2.1.4",
     "browser-sync-spa": "~1.0.2",
     "chalk": "~0.5.1",

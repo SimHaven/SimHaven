@@ -109,6 +109,11 @@ namespace FSO.Server.Api.Core.Controllers.Admin
             var api = Api.INSTANCE;
             api.DemandModerator(Request);
 
+            if (request.end_day <= request.start_day)
+            {
+                return BadRequest("Event end time must be after its start time.");
+            }
+
             using (var da = api.DAFactory.Get())
             {
                 DbEventType type;
@@ -119,6 +124,33 @@ namespace FSO.Server.Api.Core.Controllers.Admin
                 catch
                 {
                     return BadRequest("Event type must be one of:" + string.Join(", ", Enum.GetNames(typeof(DbEventType))));
+                }
+
+                if (type == DbEventType.obj_tuning)
+                {
+                    var requestedItems = da.Tuning.GetPresetItems(request.value).ToList();
+                    if (requestedItems.Count == 0)
+                    {
+                        return BadRequest("The selected tuning preset does not exist or contains no tuning values.");
+                    }
+
+                    var requestedKeys = requestedItems
+                        .Select(x => x.tuning_type + "|" + x.tuning_table + "|" + x.tuning_index)
+                        .ToList();
+                    var overlapping = da.Events.GetOverlapping(request.start_day, request.end_day, DbEventType.obj_tuning);
+                    var conflict = overlapping.FirstOrDefault(evt => da.Tuning.GetPresetItems(evt.value)
+                        .Any(item => requestedKeys.Contains(item.tuning_type + "|" + item.tuning_table + "|" + item.tuning_index)));
+
+                    if (conflict != null)
+                    {
+                        return Conflict(new
+                        {
+                            code = "tuning_conflict",
+                            message = "This event overlaps another event that changes the same tuning value.",
+                            conflicting_event_id = conflict.event_id,
+                            conflicting_event_title = conflict.title
+                        });
+                    }
                 }
                 var model = new DbEvent()
                 {
@@ -136,6 +168,20 @@ namespace FSO.Server.Api.Core.Controllers.Admin
                 };
                 return new JsonResult(new { id = da.Events.Add(model) });
             }
+        }
+
+        [HttpPost("{id}/end")]
+        public IActionResult End(int id)
+        {
+            var api = Api.INSTANCE;
+            api.DemandModerator(Request);
+
+            using (var da = api.DAFactory.Get())
+            {
+                if (!da.Events.End(id, DateTime.UtcNow)) return NotFound();
+            }
+
+            return Ok();
         }
 
         [HttpDelete]

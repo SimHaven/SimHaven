@@ -8,7 +8,9 @@ namespace FSO.Server.Database.DA.DbEvents
     {
         PagedList<DbEvent> All(int offset = 0, int limit = 20, string orderBy = "start_day");
         List<DbEvent> GetActive(DateTime time);
+        List<DbEvent> GetOverlapping(DateTime start, DateTime end, DbEventType type);
         int Add(DbEvent evt);
+        bool End(int event_id, DateTime end);
         bool Delete(int event_id);
 
         bool TryParticipate(DbEventParticipation p);

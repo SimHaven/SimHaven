@@ -1,0 +1,140 @@
+<md-dialog class="event-dialog" aria-label="Create special event">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{copy ? 'Duplicate Special Event' : 'Create Special Event'}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()" aria-label="Close">
+                <md-icon ng-md-icon icon="close"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-content class="md-padding">
+        <form name="eventForm">
+            <section class="event-dialog__section">
+                <h3>Event Type</h3>
+                <md-radio-group ng-model="req.kind" layout="row" layout-wrap>
+                    <md-radio-button value="boost">Gameplay / Season</md-radio-button>
+                    <md-radio-button value="preset">Existing Preset</md-radio-button>
+                    <md-radio-button value="money">Simoleon Gift</md-radio-button>
+                    <md-radio-button value="mail">Mail Only</md-radio-button>
+                </md-radio-group>
+            </section>
+
+            <section class="event-dialog__section">
+                <h3>Public Details</h3>
+                <div layout="row" layout-sm="column">
+                    <md-input-container flex>
+                        <label>Event Name</label>
+                        <input required maxlength="128" ng-model="req.title">
+                    </md-input-container>
+                </div>
+                <md-input-container class="md-block">
+                    <label>Newspaper Description</label>
+                    <textarea ng-model="req.description" rows="3" maxlength="1000"></textarea>
+                </md-input-container>
+                <p class="event-dialog__hint">The name and description can appear in the city newspaper.</p>
+            </section>
+
+            <section class="event-dialog__section">
+                <h3>Schedule</h3>
+                <p class="event-dialog__hint">Times use this browser's local timezone. On the SimHaven admin computer, enter Central Time; UTC is stored automatically.</p>
+                <div layout="row" layout-sm="column" layout-align="start center">
+                    <md-input-container flex>
+                        <label>Start</label>
+                        <input required type="datetime-local" ng-model="req.start_local">
+                    </md-input-container>
+                    <md-button type="button" ng-click="startNow()">Start Now</md-button>
+                    <md-input-container flex>
+                        <label>End</label>
+                        <input required type="datetime-local" ng-model="req.end_local" min="{{req.start_local | date:'yyyy-MM-ddTHH:mm'}}">
+                    </md-input-container>
+                </div>
+                <div class="event-dialog__warning" ng-if="req.end_local <= req.start_local">End time must be after the start time.</div>
+            </section>
+
+            <section class="event-dialog__section" ng-if="req.kind === 'boost'">
+                <h3>Gameplay Effects</h3>
+                <div layout="row" layout-sm="column">
+                    <md-input-container flex>
+                        <label>Skill Speed Boost</label>
+                        <md-select ng-model="req.skill_boost">
+                            <md-option ng-value="0">Normal</md-option>
+                            <md-option ng-value="20">+20%</md-option>
+                            <md-option ng-value="30">+30%</md-option>
+                            <md-option ng-value="50">+50%</md-option>
+                            <md-option ng-value="100">Double skill speed</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Money Object Boost</label>
+                        <md-select ng-model="req.money_boost">
+                            <md-option ng-value="0">Normal</md-option>
+                            <md-option ng-value="25">+25%</md-option>
+                            <md-option ng-value="50">+50%</md-option>
+                            <md-option ng-value="100">Double money-object earnings</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>City Terrain</label>
+                        <md-select ng-model="req.season">
+                            <md-option value="none">No seasonal change</md-option>
+                            <md-option value="autumn">Autumn</md-option>
+                            <md-option value="winter">Winter / Snow</md-option>
+                            <md-option value="summer">Summer / Grass</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div class="event-dialog__warning">Money-object boosts do not affect Job Lot payouts. Skill and money tuning does not apply inside Job Lots.</div>
+                <div class="event-dialog__warning" ng-if="!hasTuning()">Choose at least one gameplay or seasonal effect.</div>
+            </section>
+
+            <section class="event-dialog__section" ng-if="req.kind === 'preset'">
+                <h3>Existing Tuning Preset</h3>
+                <md-input-container class="md-block">
+                    <label>Preset</label>
+                    <md-select required ng-model="req.existing_preset_id">
+                        <md-option ng-value="preset.preset_id" ng-repeat="preset in presets">{{preset.name}} - {{preset.description}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </section>
+
+            <section class="event-dialog__section" ng-if="req.kind === 'money'">
+                <h3>One-Time Account Gift</h3>
+                <md-input-container class="md-block">
+                    <label>Simoleons</label>
+                    <input required type="number" min="1" max="10000000" ng-model="req.amount">
+                </md-input-container>
+                <p class="event-dialog__hint">Each account receives this once when it logs in during the event.</p>
+            </section>
+
+            <section class="event-dialog__section">
+                <md-checkbox ng-model="req.send_mail" ng-disabled="req.kind === 'mail'" aria-label="Send in-game mail">
+                    Send an in-game mail announcement
+                </md-checkbox>
+                <div ng-if="req.send_mail || req.kind === 'mail'">
+                    <div layout="row" layout-sm="column">
+                        <md-input-container flex>
+                            <label>Mail Subject</label>
+                            <input required ng-model="req.mail_subject" maxlength="128">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Sender Name</label>
+                            <input required ng-model="req.mail_sender_name" maxlength="64">
+                        </md-input-container>
+                    </div>
+                    <md-input-container class="md-block">
+                        <label>Mail Message</label>
+                        <textarea required ng-model="req.mail_message" rows="5"></textarea>
+                    </md-input-container>
+                </div>
+            </section>
+        </form>
+    </md-content>
+
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button ng-click="cancel()">Cancel</md-button>
+        <md-button class="md-primary md-raised" ng-click="ok()" ng-disabled="eventForm.$invalid || req.end_local <= req.start_local || (req.kind === 'boost' && !hasTuning())">Save Event</md-button>
+    </div>
+</md-dialog>
