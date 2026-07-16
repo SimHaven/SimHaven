@@ -8,9 +8,9 @@ The SimHaven launcher is maintained separately in [SimHaven/SimHaven-Launcher](h
 
 ## Built on FreeSO
 
-SimHaven is built upon [FreeSO](https://github.com/riperiperi/FreeSO), the open-source reimplementation of *The Sims Online* created by Rhys Simpson ([riperiperi](https://github.com/riperiperi)) with contributions from the wider FreeSO community.
+SimHaven is built upon [FreeSO](https://github.com/riperiperi/FreeSO), the open-source reimplementation of *The Sims Online* created by Rhys ([riperiperi](https://github.com/riperiperi)) with contributions from the wider FreeSO community.
 
-FreeSO represents years of reverse engineering, engine development, preservation work, and community effort. SimHaven would not exist without that foundation. We are deeply grateful to Rhys and every FreeSO contributor for making their work available under the Mozilla Public License 2.0.
+FreeSO represents years of reverse engineering, engine development, preservation work, and community effort. SimHaven would not exist without that foundation. We are deeply grateful to Rhys ([riperiperi](https://github.com/riperiperi)) and every FreeSO contributor for making their work available under the Mozilla Public License 2.0.
 
 SimHaven maintains and extends FreeSO for its own community. It is an independent project and is not operated, sponsored, or endorsed by the original FreeSO developers or Electronic Arts.
 
@@ -34,7 +34,7 @@ Volcanic is FreeSO's live object-development and debugging environment. It can i
 
 ### Simitone and The Sims 1
 
-Parts of FreeSO's content system, HIT virtual machine, and SimAntics virtual machine also support data from *The Sims*. That work formed a foundation for [Simitone](https://github.com/riperiperi/Simitone), Rhys Simpson's separate reimplementation of *The Sims* engine.
+Parts of FreeSO's content system, HIT virtual machine, and SimAntics virtual machine also support data from *The Sims*. That work formed a foundation for [Simitone](https://github.com/riperiperi/Simitone), Rhys's separate reimplementation of *The Sims* engine.
 
 ## Original game files
 
