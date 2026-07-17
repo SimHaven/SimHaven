@@ -36,13 +36,9 @@ Maintainers may request changes or decline work that conflicts with SimHaven's d
 
 Never include:
 
-- Credentials, tokens, keys, passwords, or live configuration
-- Player, account, database, analytics, or support data
-- The live server's `nfs` runtime state, lots, inventories, or persistent objects
-- Unreviewed logs, crash reports, database dumps, or backups
+- Passwords, tokens, private keys, or other credentials
+- Personal or private user data
 - Electronic Arts game files
-- SimHaven's private deployment, CDN, website, or release packages
-- SimHaven's licensed Discord bot or any of its files
 - Compiled binaries or installers unless a maintainer explicitly requests them
 - New dependencies or GitHub workflow changes without explaining their purpose, source, and license
 
