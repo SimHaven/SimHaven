@@ -30,6 +30,7 @@ using FSO.Server.Database.DA.Elections;
 using FSO.Server.Database.DA.Bulletin;
 using FSO.Server.Database.DA.Updates;
 using FSO.Server.Database.DA.GlobalCooldowns;
+using FSO.Server.Database.DA.AvatarTop100;
 
 namespace FSO.Server.Database.DA
 {
@@ -42,6 +43,7 @@ namespace FSO.Server.Database.DA
         IAvatars Avatars { get; }
         IObjects Objects { get; }
         IRelationships Relationships { get; }
+        IAvatarTop100 AvatarTop100 { get; }
         IRoommates Roommates { get; }
         ILots Lots { get; }
         ILotAdmit LotAdmit { get; }

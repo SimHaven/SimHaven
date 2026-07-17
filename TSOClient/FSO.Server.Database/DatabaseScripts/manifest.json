@@ -285,6 +285,15 @@
       "requires": [
         "bec36bbc-1774-44cb-a7c5-03f4a00e801c"
       ]
+    },
+    {
+      "id": "88e4635d-bd34-4b25-af60-4441157ac385",
+      "script": "changes/0032_fso_avatar_top100.sql",
+      "idempotent": false,
+      "requires": [
+        "bec36bbc-1774-44cb-a7c5-03f4a00e801c",
+        "def48038-d0d6-4b10-a129-0b9c736e4d35"
+      ]
     }
   ]
 }

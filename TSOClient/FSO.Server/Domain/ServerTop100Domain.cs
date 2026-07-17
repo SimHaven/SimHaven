@@ -2,7 +2,7 @@ using FSO.Common.DatabaseService.Model;
 using FSO.Common.Domain.Top100;
 using FSO.Common.Enum;
 using FSO.Server.Database.DA;
-using FSO.Server.Database.DA.Relationships;
+using FSO.Server.Database.DA.AvatarTop100;
 using FSO.Server.Servers.City;
 using System;
 using System.Collections.Generic;
@@ -55,10 +55,10 @@ namespace FSO.Server.Domain
                         var avatarCategory = ToAvatarCategory(category);
                         if (avatarCategory.HasValue)
                         {
-                            results = db.Relationships.GetTop100(Context.ShardId, avatarCategory.Value, 100)
-                                .Select((x, index) => new Top100Entry()
+                            results = db.AvatarTop100.GetByCategory(Context.ShardId, avatarCategory.Value)
+                                .Select(x => new Top100Entry()
                                 {
-                                    Rank = (byte)(index + 1),
+                                    Rank = x.rank,
                                     TargetId = x.avatar_id,
                                     TargetName = x.name
                                 }).ToList();
