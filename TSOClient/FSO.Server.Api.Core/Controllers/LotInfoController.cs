@@ -76,6 +76,7 @@ namespace FSO.Server.Api.Core.Controllers
         }
 
         [HttpGet]
+        [HttpHead]
         [Route("userapi/city/{shardid}/{id}.png")]
         [ResponseCache(Duration = 60 * 60, Location = ResponseCacheLocation.Any)]
         public IActionResult Get(int shardid, uint id)
