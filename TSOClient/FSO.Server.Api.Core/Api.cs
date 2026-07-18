@@ -10,6 +10,7 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Security;
+using System.Security.Authentication;
 
 namespace FSO.Server.Api.Core
 {
@@ -78,28 +79,42 @@ namespace FSO.Server.Api.Core
             
             if (!string.IsNullOrEmpty(request.Headers["Authorization"]))
             {
-                result = JWT.DecodeToken(GetAuthParam(request.Headers["Authorization"]));
+                result = DecodeAuthenticationToken(GetAuthParam(request.Headers["Authorization"]));
             }
             else
             {
                 var cookies = request.Cookies;
                 if (cookies == null)
-                    throw new SecurityException("Unable to find cookie");
+                    throw new AuthenticationException("Unable to find authentication cookie");
 
 
                 var cookie = cookies["fso"];
                 if (string.IsNullOrEmpty(cookie))
                 {
-                    throw new SecurityException("Unable to find cookie");
+                    throw new AuthenticationException("Unable to find authentication cookie");
                 }
-                result = JWT.DecodeToken(cookie);
+                result = DecodeAuthenticationToken(cookie);
             }
             if (result == null)
             {
-                throw new SecurityException("Invalid token");
+                throw new AuthenticationException("Invalid authentication token");
             }
 
             return result;
+        }
+
+        private JWTUser DecodeAuthenticationToken(string token)
+        {
+            try
+            {
+                return JWT.DecodeToken(token);
+            }
+            catch (Exception ex)
+            {
+                // Token parsing and verification failures are authentication failures,
+                // not unhandled application errors.
+                throw new AuthenticationException("Invalid or expired authentication token", ex);
+            }
         }
 
         public string GetAuthParam(string auth)
@@ -199,12 +214,12 @@ namespace FSO.Server.Api.Core
 
         public void DemandModerator(JWTUser user)
         {
-            if (!user.Claims.Contains("moderator")) throw new Exception("Requires Moderator level status");
+            if (!user.Claims.Contains("moderator")) throw new SecurityException("Requires Moderator level status");
         }
 
         public void DemandAdmin(JWTUser user)
         {
-            if (!user.Claims.Contains("admin")) throw new Exception("Requires Admin level status");
+            if (!user.Claims.Contains("admin")) throw new SecurityException("Requires Admin level status");
         }
 
         public void DemandModerator(HttpRequest request)

@@ -90,8 +90,16 @@ angular.module('admin', ['ngSanitize', 'restangular', 'ui.router', 'ngMaterial',
   }).run(function ($rootScope, $location, Auth) {
     Auth.restore();
 
+    $rootScope.$on('auth:expired', function () {
+        Auth.logout();
+        if ($location.path() !== '/login') {
+            $location.path('/login');
+        }
+    });
+
     $rootScope.$on('$stateChangeError',
         function (event, toState, toParams, fromState, fromParams) {
+            Auth.logout();
             $location.path('/login');
         });
 

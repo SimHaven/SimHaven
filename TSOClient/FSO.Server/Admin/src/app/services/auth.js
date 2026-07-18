@@ -6,18 +6,29 @@ angular.module('admin').service('Auth', function ($window, Api, Token, $rootScop
 
     this.loggedIn = false;
 
-    function bootstrapUser(token, expires_in, deferred) {
+    function bootstrapUser(token, deferred, onComplete) {
         Token.setToken(token);
         Api.one('users', 'current').get().then(function (val) {
             $rootScope.currentUser = val;
             self.loggedIn = true;
+            $rootScope.$broadcast('auth:restored');
+            if (onComplete) onComplete();
             deferred.resolve();
         }, function (err) {
+            self.logout();
+            if (onComplete) onComplete();
             deferred.reject();
         });
     }
 
     var restorePromise = null;
+
+    this.logout = function () {
+        Token.clear();
+        $rootScope.currentUser = null;
+        self.loggedIn = false;
+        restorePromise = null;
+    };
 
     this.restore = function () {
         if (restorePromise != null) {
@@ -25,26 +36,40 @@ angular.module('admin').service('Auth', function ($window, Api, Token, $rootScop
         }
 
         var deferred = $q.defer();
-        if (Token.getTokenImmediately() == null) {
-            var authToken = $window.sessionStorage.getItem('authToken');
-            if (authToken != null) {
+        var currentRestore = deferred.promise;
+        restorePromise = currentRestore;
+
+        var finishRestore = function () {
+            if (restorePromise === currentRestore) {
+                restorePromise = null;
+            }
+        };
+
+        var authToken = $window.sessionStorage.getItem('authToken');
+        if (authToken != null) {
+            try {
                 authToken = JSON.parse(authToken);
                 if (authToken.expires > new Date().getTime()) {
                     /** Still active **/
                     Api.setBaseUrl(authToken.api);
-                    bootstrapUser(authToken.access_token, (new Date().getTime() - authToken.expires) / 1000, deferred);
-                    return;
+                    if (Token.getTokenImmediately() == null) {
+                        bootstrapUser(authToken.access_token, deferred, finishRestore);
+                    } else {
+                        finishRestore();
+                        deferred.resolve();
+                    }
+                    return currentRestore;
                 }
+            } catch (err) {
+                // Invalid stored session data is handled like an expired session.
             }
-
-            deferred.reject();
-        } else {
-            deferred.resolve();
         }
 
-        restorePromise = deferred.promise;
-        return restorePromise;
-    }
+        self.logout();
+        finishRestore();
+        deferred.reject();
+        return currentRestore;
+    };
 
     this.login = function (apiUrl, username, password) {
         apiUrl += "/admin";
@@ -69,9 +94,8 @@ angular.module('admin').service('Auth', function ($window, Api, Token, $rootScop
                     access_token: result.access_token,
                     expires: new Date().getTime() + (result.expires_in * 1000)
                 }));
-                
-        restorePromise = null;
-                bootstrapUser(result.access_token, result.expires_in, deferred);
+                restorePromise = null;
+                bootstrapUser(result.access_token, deferred);
             } else {
                 deferred.reject();
             }
@@ -80,6 +104,6 @@ angular.module('admin').service('Auth', function ($window, Api, Token, $rootScop
         });
 
         return deferred.promise;
-    }
+    };
 
 });
