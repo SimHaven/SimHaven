@@ -96,6 +96,37 @@ namespace FSO.Client.UI.Panels.WorldUI
         public int SkillValue = -1;
         public int SpeedValue = -1;
 
+        private static readonly float[] SkillLevelTiming =
+        {
+            400, 800, 1200, 1600, 2000, 2400,
+            2800, 3200, 3600, 4000, 7800
+        };
+
+        private static float GetSkillTimingMultiplier(VM vm, int skillValue)
+        {
+            if (vm?.Tuning == null) return 1f;
+
+            float normalTiming;
+            float activeTiming;
+
+            if (skillValue < 1100)
+            {
+                var level = Math.Max(0, Math.Min(skillValue / 100, SkillLevelTiming.Length - 1));
+                normalTiming = SkillLevelTiming[level];
+                activeTiming = vm.Tuning.GetTuning("skillobjects.iff", 8, level) ?? normalTiming;
+            }
+            else
+            {
+                // FreeSO's event scheduler uses this global timing for skills
+                // above level 10.99.
+                normalTiming = 800f;
+                activeTiming = vm.Tuning.GetTuning("global.iff", 29, 1) ?? normalTiming;
+            }
+
+            if (activeTiming <= 0 || float.IsNaN(activeTiming) || float.IsInfinity(activeTiming)) return 1f;
+            return normalTiming / activeTiming;
+        }
+
         public void ProcessSkill()
         {
             var avatar = (VMAvatar)Headline.Target;
@@ -104,7 +135,9 @@ namespace FSO.Client.UI.Panels.WorldUI
             if (e1 < 0 || e1 > 100) return; //invalid skill
             var skillValue = avatar.GetPersonData((VMPersonDataVariable)(e1));
             var speedValue = (eff & 0xFF);
-            speedValue *= avatar.SkillGameplayMul(avatar.Thread.Context.VM);
+            var vm = avatar.Thread.Context.VM;
+            speedValue *= avatar.SkillGameplayMul(vm);
+            speedValue = (int)Math.Round(speedValue * GetSkillTimingMultiplier(vm, skillValue), MidpointRounding.AwayFromZero);
             
             if (skillValue != SkillValue || SpeedValue != speedValue)
             {
