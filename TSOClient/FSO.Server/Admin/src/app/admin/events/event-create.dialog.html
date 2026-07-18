@@ -94,7 +94,7 @@
                 <md-input-container class="md-block">
                     <label>Preset</label>
                     <md-select required ng-model="req.existing_preset_id">
-                        <md-option ng-value="preset.preset_id" ng-repeat="preset in presets">{{preset.name}} - {{preset.description}}</md-option>
+                        <md-option ng-value="preset.preset_id" ng-repeat="preset in reusablePresets">{{preset.name}} - {{preset.description}}</md-option>
                     </md-select>
                 </md-input-container>
             </section>

@@ -294,6 +294,14 @@
         "bec36bbc-1774-44cb-a7c5-03f4a00e801c",
         "def48038-d0d6-4b10-a129-0b9c736e4d35"
       ]
+    },
+    {
+      "id": "c77dbd6a-61b8-4f80-b92e-f8c26b3a1a49",
+      "script": "changes/0033_freeso_event_presets.sql",
+      "idempotent": false,
+      "requires": [
+        "2b6e2b3f-81af-4f23-8a69-2428debcfcc5"
+      ]
     }
   ]
 }

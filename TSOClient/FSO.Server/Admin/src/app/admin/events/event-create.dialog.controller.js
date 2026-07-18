@@ -6,7 +6,29 @@ angular.module('admin')
       var now = new Date();
       var tomorrow = new Date(now.getTime() + (24 * 60 * 60 * 1000));
 
+      var reusablePresetNames = {
+          'FreeSO - April Fools Fire': true,
+          'FreeSO - April Fools Emoji Only': true,
+          'FreeSO - Pizza Roulette': true,
+          'FreeSO - Hat Towers': true,
+          'FreeSO - April Fools Inverted Motives': true,
+          'FreeSO - AmongSO': true,
+          'FreeSO - April Fools PeeSO': true,
+          'FreeSO - Summer Heatwave': true,
+          'FreeSO - Fructose Monsoon': true,
+          'FreeSO - Halloween Candy and Zombies': true,
+          'FreeSO - Halloween Dead World': true,
+          'FreeSO - Halloween Complete': true,
+          'FreeSO - Christmas Snowball Fights': true,
+          'FreeSO - Christmas Santa and Tree': true,
+          'FreeSO - Christmas Snow Weather': true,
+          'FreeSO - Christmas Complete': true
+      };
+
       $scope.presets = presets;
+      $scope.reusablePresets = presets.filter(function (preset) {
+          return reusablePresetNames[preset.name] === true;
+      });
       $scope.req = {
           kind: 'boost',
           title: '',
@@ -95,11 +117,26 @@ angular.module('admin')
               };
 
               if (req.skill_boost > 0) {
+                  var skillMultiplier = 1 + req.skill_boost / 100;
+                  var skillLevelSeconds = [400, 800, 1200, 1600, 2000, 2400, 2800, 3200, 3600, 4000, 7800];
+
+                  // Match FreeSO's event scheduler: preserve the normal skill
+                  // efficiency formula and shorten the time required per point.
+                  skillLevelSeconds.forEach(function (seconds, index) {
+                      result.preset.items.push({
+                          tuning_type: 'skillobjects.iff',
+                          tuning_table: 8,
+                          tuning_index: index,
+                          value: Math.max(1, Math.floor(seconds / skillMultiplier))
+                      });
+                  });
+
+                  // FreeSO uses this global timing value for skill levels above 10.
                   result.preset.items.push({
-                      tuning_type: 'skillobjects.iff',
-                      tuning_table: 0,
-                      tuning_index: 0,
-                      value: Math.round(10 * (1 + req.skill_boost / 100))
+                      tuning_type: 'global.iff',
+                      tuning_table: 29,
+                      tuning_index: 1,
+                      value: Math.max(1, Math.floor(800 / skillMultiplier))
                   });
               }
               if (req.money_boost > 0) {
