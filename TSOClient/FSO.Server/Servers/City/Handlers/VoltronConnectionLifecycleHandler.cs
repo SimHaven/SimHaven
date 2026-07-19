@@ -7,6 +7,7 @@ using FSO.Server.Framework.Voltron;
 using FSO.Server.Protocol.Gluon.Packets;
 using FSO.Server.Protocol.Voltron.Packets;
 using FSO.Server.Servers.City.Domain;
+using System;
 
 namespace FSO.Server.Servers.City.Handlers
 {
@@ -126,6 +127,12 @@ namespace FSO.Server.Servers.City.Handlers
             //Mark as online
             avatar.Avatar_IsOnline = true;
             VoltronSessions.Enroll(newSession);
+
+            using (var db = DAFactory.Get())
+            {
+                db.Relationships.MarkAvatarActive(voltronSession.AvatarId, DateTime.UtcNow.Date);
+            }
+
             Events.UserJoined(voltronSession);
             Neigh.UserJoined(voltronSession);
             TuningDomain.UserJoined(voltronSession);

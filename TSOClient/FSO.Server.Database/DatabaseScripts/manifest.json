@@ -302,6 +302,14 @@
       "requires": [
         "2b6e2b3f-81af-4f23-8a69-2428debcfcc5"
       ]
+    },
+    {
+      "id": "edf06a67-c9f6-4c4f-9f29-288ba5a72325",
+      "script": "changes/0034_relationship_decay.sql",
+      "idempotent": false,
+      "requires": [
+        "992dfad3-9e31-4db9-8cd7-7d964951e5b5"
+      ]
     }
   ]
 }

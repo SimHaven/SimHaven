@@ -9,4 +9,11 @@ namespace FSO.Server.Database.DA.Relationships
         public uint? comment_id { get; set; }
         public uint date { get; set; }
     }
+
+    public class DbRelationshipDecayResult
+    {
+        public int processed { get; set; }
+        public int changed { get; set; }
+        public int deleted { get; set; }
+    }
 }

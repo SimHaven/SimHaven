@@ -23,6 +23,13 @@
           "parameter": {}
         },
         {
+          "cron": "30 3 * * *",
+          "task": "relationship_decay",
+          "timeout": 3600,
+          "shard_id": 1,
+          "parameter": {}
+        },
+        {
           "cron": "0 4 * * *",
           "task": "bonus",
           "timeout": 3600,
@@ -80,6 +87,10 @@
               "mail_sender_name": "FreeSO Developers"
             }
           ]
+        },
+        "relationshipDecay": {
+          "grace_active_days": 7,
+          "ltr_active_day_interval": 7
         }
       }
     },
