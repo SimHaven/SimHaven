@@ -25,7 +25,7 @@ namespace FSO.UI.Model
                 handlers.requestCallback += Request;
                 Events = handlers;
 
-                DiscordRpc.Initialize("378352963468525569", ref handlers, true, null);
+                DiscordRpc.Initialize("1523218624469270538", ref handlers, true, null);
             } catch (Exception)
             {
                 Active = false;
@@ -53,7 +53,7 @@ namespace FSO.UI.Model
             var presence = new DiscordRpc.RichPresence();
             
             presence.largeImageKey = "sunrise_crater";
-            presence.largeImageText = "Sunrise Crater";
+            presence.largeImageText = "playsimhaven.com";
 
             presence.state = state;
             presence.details = details == null ? "" : details;
@@ -123,7 +123,7 @@ namespace FSO.UI.Model
             
 
             presence.largeImageKey = "sunrise_crater";
-            presence.largeImageText = "Sunrise Crater";
+            presence.largeImageText = "playsimhaven.com";
 
             if (lotName != null && !isPrivate)
             {
