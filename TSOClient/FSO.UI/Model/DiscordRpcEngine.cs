@@ -139,7 +139,7 @@ namespace FSO.UI.Model
                     presence.smallImageKey = "cat_" + catID;
                     presence.smallImageText = CapFirstWord(((LotCategory)catID).ToString());
 
-                    presence.largeImageKey = $"{cdnUrl}/userapi/city/1/{lotID}.png";
+                    presence.largeImageKey = $"{cdnUrl.TrimEnd('/')}/userapi/city/1/{lotID}.png";
                     presence.largeImageText = presence.state;
                 }
                 else
